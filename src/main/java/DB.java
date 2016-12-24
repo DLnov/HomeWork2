@@ -14,10 +14,13 @@ public class DB {
             e.printStackTrace();
         }
     }
-
     public static String DB_URL = "jdbc:postgresql://localhost:5432/HomeWork2";
 
-    public void connectToDB(){
+    public void connectToDB() throws SQLException {
+        connection = DriverManager.getConnection(DB_URL);
+    }
 
+    public Connection getConnection() {
+        return connection;
     }
 }
