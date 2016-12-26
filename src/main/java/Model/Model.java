@@ -1,11 +1,11 @@
+package Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
-/**
- * Created by INNO on 25.12.2016.
- */
+
 public class Model {
     public static final Logger logger = LoggerFactory.getLogger(Model.class);
 
@@ -27,5 +27,9 @@ public class Model {
             logger.warn(e.getLocalizedMessage(), e);
         }
         return result;
+    }
+
+    public void setDb(DB db) {
+        this.db = db;
     }
 }
