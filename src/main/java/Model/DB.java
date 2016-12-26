@@ -1,3 +1,5 @@
+package Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -5,8 +7,10 @@ import java.sql.*;
 
 public class DB {
     public static Logger logger = LoggerFactory.getLogger(DB.class);
+    private static PreparedStatement prepIsUser;
+    public static String DB_URL = "jdbc:postgresql://localhost:5432/HomeWork2";
+
     private Connection connection;
-    private PreparedStatement prepIsUser;
 
     static {
         try{
@@ -15,7 +19,7 @@ public class DB {
             logger.warn(e.getLocalizedMessage(), e);
         }
     }
-    public static String DB_URL = "jdbc:postgresql://localhost:5432/HomeWork2";
+
 
     public void connectToDB() throws SQLException {
         connection = DriverManager.getConnection(DB_URL, "postgres", "1234");
