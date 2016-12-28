@@ -3,6 +3,7 @@ package Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -23,8 +24,9 @@ public class Model {
         }
     }
 
-    public boolean addUser(Map<String, String> userDatas) {
+    public boolean addUser(Map<String, String> userDatas, HttpSession session) {
         if(haveAccountDatas(userDatas.get("username"), userDatas.get("email"))){
+            session.setAttribute("error", "Enter new username or email!");
             return false;
         }
         try {

@@ -30,12 +30,13 @@ public class RegistryServlet extends HttpServlet {
             userDatas.put(s, req.getParameter(s));
         }
         HttpSession session = req.getSession();
+        session.removeAttribute("error");
         Model model;
         if ((model = (Model) session.getAttribute("model")) == null) {
             model = new Model();
             session.setAttribute("model", model);
         }
-        if(model.addUser(userDatas)){
+        if(model.addUser(userDatas, session)){
             session.setAttribute("username", req.getParameter("username"));
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
