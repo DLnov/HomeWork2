@@ -1,5 +1,6 @@
 package Servlet;
 
+import Exceptions.ExceptionForUser;
 import Model.Model;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ import java.io.Writer;
 public class EnterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/enter.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/enter.jsp").forward(req, resp);
     }
 
     @Override
@@ -26,19 +27,22 @@ public class EnterServlet extends HttpServlet {
         if (user == null || pass == null || user.isEmpty() || pass.isEmpty()) {
             isFull = false;
         }
-
-        if (isFull) {
-            Model model;
-            if ((model = (Model) session.getAttribute("model")) == null) {
-                model = new Model();
-                session.setAttribute("model", model);
+        try {
+            if (isFull) {
+                Model model;
+                if ((model = (Model) session.getAttribute("model")) == null) {
+                    model = new Model();
+                    session.setAttribute("model", model);
+                }
+                if (model.haveUser(user, pass)) {
+                    session.setAttribute("username", user);
+                    resp.sendRedirect(req.getContextPath() + "/home");
+                    return;
+                }
             }
-            if (model.haveUser(user, pass)) {
-                session.setAttribute("username", user);
-                resp.sendRedirect(req.getContextPath() + "/home");
-                return;
-            }
+        }catch (ExceptionForUser e){
+            req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);
         }
-        req.getServletContext().getRequestDispatcher("/enter.jsp").forward(req, resp);
+        req.getServletContext().getRequestDispatcher("/jsp/enter.jsp").forward(req, resp);
     }
 }
