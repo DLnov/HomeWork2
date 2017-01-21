@@ -1,7 +1,7 @@
 package Servlet;
 
 import Exceptions.ExceptionForUser;
-import Model.Model;
+import Model.BackLogic;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +13,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by INNO on 27.12.2016.
- */
+
 public class RegistryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,15 +31,17 @@ public class RegistryServlet extends HttpServlet {
         HttpSession session = req.getSession();
         session.removeAttribute("error");
         try {
-            Model model;
-            if ((model = (Model) session.getAttribute("model")) == null) {
-                model = new Model();
-                session.setAttribute("model", model);
+            BackLogic backLogic;
+            if ((backLogic = (BackLogic) session.getAttribute("backLogic")) == null) {
+                backLogic = new BackLogic();
+                session.setAttribute("model", backLogic);
             }
-            if (model.addUser(userDatas, session)) {
+            if (backLogic.addUser(userDatas)) {
                 session.setAttribute("username", req.getParameter("username"));
                 resp.sendRedirect(req.getContextPath() + "/home");
                 return;
+            }else {
+                session.setAttribute("error", "Enter new username or email!");
             }
         }catch (ExceptionForUser e){
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);

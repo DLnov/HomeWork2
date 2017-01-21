@@ -10,11 +10,10 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Map;
 
-public class DB {
+public class DB implements DataBaseSQL {
     public static Logger logger = LoggerFactory.getLogger(DB.class);
     private DataSource ds;
     private Connection connection;
-    private boolean takeNewCon = true;
 
     public DB() throws ExceptionForUser {
         try {
@@ -29,21 +28,25 @@ public class DB {
 
     public Connection getConnection() throws SQLException {
         connection = ds.getConnection();
-        takeNewCon = false;
         return connection;
+
     }
-    public Connection getSimlpeConnection(){
+
+    public Connection getSimpleConnection() {
         return connection;
     }
 
-    public void switchConnectionMode(){
-        takeNewCon = (takeNewCon) ? false : true;
+    public ResultSet getNote(String expression) throws SQLException {
+        ResultSet resultSet;
+        Statement statement = connection.createStatement();
+        resultSet = statement.executeQuery(expression);
+
+        return resultSet;
     }
 
     public ResultSet getNote
             (String checkField, String value, String tbName, String... resultField) throws SQLException {
-        if (takeNewCon)
-            connection = ds.getConnection();
+        ResultSet resultSet;
         Statement statement = connection.createStatement();
         StringBuilder result = new StringBuilder();
         for (String s : resultField) {
@@ -53,12 +56,13 @@ public class DB {
         result.delete(result.length() - 2, result.length());
         String s = "SELECT " + result.toString() + " FROM " + tbName + "" +
                 " WHERE " + checkField + "='" + value + "'";
-        return statement.executeQuery(s);
+        resultSet = statement.executeQuery(s);
+
+        return resultSet;
+
     }
 
     public boolean addNote(Map<String, String> userDatas, String tbName) throws SQLException {
-        if (takeNewCon)
-            connection = ds.getConnection();
         Statement statement = connection.createStatement();
         StringBuilder end = new StringBuilder(") VALUES (");
         StringBuilder start = new StringBuilder("INSERT INTO ");
@@ -75,33 +79,32 @@ public class DB {
         end.delete(end.length() - 2, end.length());
         end.append(")");
         statement.executeUpdate(start.toString() + end.toString());
+
         return true;
     }
 
     public boolean isUser(String name, String password) throws SQLException {
-        if (takeNewCon)
-            connection = ds.getConnection();
         PreparedStatement prepIsUser = connection.prepareStatement
                 ("SELECT * FROM usertable WHERE username=? AND password=?");
         prepIsUser.setString(1, name);
         prepIsUser.setString(2, password);
-        try (ResultSet resultSet = prepIsUser.executeQuery()) {
-            return resultSet.next();
-        }
+        ResultSet resultSet = prepIsUser.executeQuery();
+        return resultSet.next();
     }
 
     public boolean haveNote(String param, String value, String tbName) throws SQLException {
-        if (takeNewCon)
-            connection = ds.getConnection();
         Statement statement = connection.createStatement();
-        try (ResultSet resultSet = statement.executeQuery
-                ("SELECT * FROM " + tbName + " WHERE " + param + "='" + value + "'")) {
-            return resultSet.next();
-        }
+        ResultSet resultSet = statement.executeQuery
+                ("SELECT * FROM " + tbName + " WHERE " + param + "='" + value + "'");
+        return resultSet.next();
+
+
     }
+
 
     public static void main(String[] args) {
 
     }
+
 
 }

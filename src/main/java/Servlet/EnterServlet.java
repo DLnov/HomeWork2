@@ -1,7 +1,7 @@
 package Servlet;
 
 import Exceptions.ExceptionForUser;
-import Model.Model;
+import Model.BackLogic;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.Writer;
 
 
 public class EnterServlet extends HttpServlet {
@@ -29,12 +28,12 @@ public class EnterServlet extends HttpServlet {
         }
         try {
             if (isFull) {
-                Model model;
-                if ((model = (Model) session.getAttribute("model")) == null) {
-                    model = new Model();
-                    session.setAttribute("model", model);
+                BackLogic backLogic;
+                if ((backLogic = (BackLogic) session.getAttribute("backLogic")) == null) {
+                    backLogic = new BackLogic();
+                    session.setAttribute("model", backLogic);
                 }
-                if (model.haveUser(user, pass)) {
+                if (backLogic.haveUser(user, pass)) {
                     session.setAttribute("username", user);
                     resp.sendRedirect(req.getContextPath() + "/home");
                     return;
