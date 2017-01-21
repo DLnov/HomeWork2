@@ -1,7 +1,7 @@
 package Controller;
 
 import Exceptions.ExceptionForUser;
-import Model.Logic;
+import Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -21,12 +21,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/enter")
 public class EnterController {
 
-    private Logic backLogic;
-
+    private LoginService loginLogic;
 
     @Autowired
-    public void setBackLogic(Logic backLogic) {
-        this.backLogic = backLogic;
+    public void setLoginLogic(LoginService loginLogic) {
+        this.loginLogic = loginLogic;
     }
 
     @RequestMapping(method = GET)
@@ -47,12 +46,12 @@ public class EnterController {
         }
         try {
             if (isFull) {
-                if (session.getAttribute("backLogic") != null) {
-                    backLogic = (Logic) session.getAttribute("backLogic");
+                if (session.getAttribute("loginLogic") != null) {
+                    loginLogic = (LoginService) session.getAttribute("loginLogic");
                 } else {
-                    session.setAttribute("backLogic", backLogic);
+                    session.setAttribute("loginLogic", loginLogic);
                 }
-                if (backLogic.haveUser(user, pass)) {
+                if (loginLogic.haveUser(user, pass)) {
                     session.setAttribute("username", user);
                     response.sendRedirect("/home");
                     return "home";

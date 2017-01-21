@@ -1,7 +1,7 @@
 package Controller;
 
 import Exceptions.ExceptionForUser;
-import Model.Logic;
+import Model.*;
 import POJO.Role;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,23 +21,23 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    private Logic backLogic;
+    private UserService userLogic;
 
     @RequestMapping(value = {"/home","/"}, method = RequestMethod.GET)
     public String doGet(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("backLogic") != null) {
-            backLogic = (Logic) session.getAttribute("backLogic");
+        if (session.getAttribute("userLogic") != null) {
+            userLogic = (UserService) session.getAttribute("userLogic");
         }
         Principal principal = request.getUserPrincipal();
         String username = principal.getName();
 
         try {
-            Role unit = backLogic.getProfile(username);
+            Role unit = userLogic.getProfile(username);
             List<String> list = unit.getFields();
             model.addAttribute("role", list);
 
-            JSONObject jsonObject = backLogic.getJSONObject(unit);
+            JSONObject jsonObject = userLogic.getJSONObject(unit);
             //String s = jsonObject.toString().replaceAll("\"", "\'");
             JSONArray jsonArray = new JSONArray();
             jsonArray.put(jsonObject);
@@ -58,7 +58,7 @@ public class MainController {
     }
 
     @Autowired
-    public void setBackLogic(Logic backLogic) {
-        this.backLogic = backLogic;
+    public void setUserLogic(UserService userLogic) {
+        this.userLogic = userLogic;
     }
 }

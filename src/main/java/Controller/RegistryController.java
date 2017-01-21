@@ -3,6 +3,7 @@ package Controller;
 import Exceptions.ExceptionForUser;
 import Model.BackLogic;
 import Model.Logic;
+import Model.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -23,10 +24,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/registry")
 public class RegistryController {
 
-    private Logic backLogic;
+    private LoginService loginLogic;
+
     @Autowired
-    public void setBackLogic(Logic backLogic) {
-        this.backLogic = backLogic;
+    public void setLoginLogic(LoginService loginLogic) {
+        this.loginLogic = loginLogic;
     }
 
     @RequestMapping(method = GET)
@@ -45,12 +47,12 @@ public class RegistryController {
         HttpSession session = request.getSession();
         session.removeAttribute("error");
         try {
-            if(backLogic != session.getAttribute("backLogic")) {
-                backLogic = (Logic) session.getAttribute("backLogic");
+            if(loginLogic != session.getAttribute("loginLogic")) {
+                loginLogic = (LoginService) session.getAttribute("loginLogic");
             }else {
-                session.setAttribute("backLogic", backLogic);
+                session.setAttribute("loginLogic", loginLogic);
             }
-            if (backLogic.addUser(userDatas)) {
+            if (loginLogic.addUser(userDatas)) {
                 session.setAttribute("username", request.getParameter("username"));
                 return "home";
             } else {
