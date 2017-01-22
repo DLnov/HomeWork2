@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Component
 public class UserLogic implements UserService{
-    public static final Logger logger = LoggerFactory.getLogger(BackLogic.class);
+    public static final Logger logger = LoggerFactory.getLogger(LogicBack.class);
 
     private DataBaseSQL db;
 

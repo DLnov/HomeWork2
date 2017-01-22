@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class BackLogic implements Logic {
-    public static final Logger logger = LoggerFactory.getLogger(BackLogic.class);
+public class LogicBack implements Logic {
+    public static final Logger logger = LoggerFactory.getLogger(LogicBack.class);
 
     private DataBaseSQL db;
 

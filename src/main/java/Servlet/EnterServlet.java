@@ -1,7 +1,7 @@
 package Servlet;
 
 import Exceptions.ExceptionForUser;
-import Model.BackLogic;
+import Model.LogicBack;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,12 +28,12 @@ public class EnterServlet extends HttpServlet {
         }
         try {
             if (isFull) {
-                BackLogic backLogic;
-                if ((backLogic = (BackLogic) session.getAttribute("backLogic")) == null) {
-                    backLogic = new BackLogic();
-                    session.setAttribute("model", backLogic);
+                LogicBack logicBack;
+                if ((logicBack = (LogicBack) session.getAttribute("backLogic")) == null) {
+                    logicBack = new LogicBack();
+                    session.setAttribute("model", logicBack);
                 }
-                if (backLogic.haveUser(user, pass)) {
+                if (logicBack.haveUser(user, pass)) {
                     session.setAttribute("username", user);
                     resp.sendRedirect(req.getContextPath() + "/home");
                     return;

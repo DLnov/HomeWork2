@@ -1,7 +1,7 @@
 package Servlet;
 
 import Exceptions.ExceptionForUser;
-import Model.BackLogic;
+import Model.LogicBack;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,12 +31,12 @@ public class RegistryServlet extends HttpServlet {
         HttpSession session = req.getSession();
         session.removeAttribute("error");
         try {
-            BackLogic backLogic;
-            if ((backLogic = (BackLogic) session.getAttribute("backLogic")) == null) {
-                backLogic = new BackLogic();
-                session.setAttribute("model", backLogic);
+            LogicBack logicBack;
+            if ((logicBack = (LogicBack) session.getAttribute("backLogic")) == null) {
+                logicBack = new LogicBack();
+                session.setAttribute("model", logicBack);
             }
-            if (backLogic.addUser(userDatas)) {
+            if (logicBack.addUser(userDatas)) {
                 session.setAttribute("username", req.getParameter("username"));
                 resp.sendRedirect(req.getContextPath() + "/home");
                 return;

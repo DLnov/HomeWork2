@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("Duplicates")
 @Component
 public class LoginLogic implements LoginService{
     public static final Logger logger = LoggerFactory.getLogger(LoginLogic.class);

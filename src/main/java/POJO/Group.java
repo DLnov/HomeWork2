@@ -1,8 +1,11 @@
 package POJO;
 
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Group {
 
@@ -12,8 +15,8 @@ public class Group {
     private List<Pupil> pupils = new ArrayList<>();
 
 
-
-    public Group(){}
+    public Group() {
+    }
 
     public Group(int group_id, int teacher_id, String groupName) {
         this.group_id = group_id;
@@ -25,7 +28,7 @@ public class Group {
         pupils.add(pupil);
     }
 
-    public void remove(Pupil pupil){
+    public void remove(Pupil pupil) {
         pupils.remove(pupil);
     }
 
